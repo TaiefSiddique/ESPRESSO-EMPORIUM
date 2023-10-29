@@ -54,7 +54,7 @@ const CoffeeCard = ({ coffee, coffees, setCoffees }) => {
                 <div className="card-actions justify-end">
                     <div className="btn-group btn-group-vertical space-y-4">
                         <button className="btn">View</button>
-                        <Link to={`updateCoffee/${_id}`}>
+                        <Link to={`../updateCoffee/${_id}`}>
                             <button className="btn">Edit</button>
                         </Link>
                         <button
@@ -72,7 +72,7 @@ CoffeeCard.propTypes = {
     coffee: PropTypes.shape({
         _id: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
-        quantity: PropTypes.number.isRequired,
+        quantity: PropTypes.string.isRequired,
         supplier: PropTypes.string.isRequired,
         taste: PropTypes.string.isRequired,
         photo: PropTypes.string.isRequired,
