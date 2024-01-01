@@ -1,11 +1,15 @@
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import Swal from "sweetalert2";
-
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 
 const UpdateCoffee = () => {
 
     const coffee = useLoaderData();
-    const { _id, name, quantity, supplier, taste, category, details, photo } = coffee;
+    const { _id, name, supplier, category, taste, quantity, details, photo } = coffee;
+
+
 
     const handleUpdateCoffee = event => {
         event.preventDefault();
@@ -13,16 +17,16 @@ const UpdateCoffee = () => {
         const form = event.target;
 
         const name = form.name.value;
-        const quantity = form.quantity.value;
         const supplier = form.supplier.value;
-        const taste = form.taste.value;
         const category = form.category.value;
+        const quantity = form.quantity.value;
+        const taste = form.taste.value;
         const details = form.details.value;
         const photo = form.photo.value;
 
-        const updatedCoffee = { name, quantity, supplier, taste, category, details, photo }
-
+        const updatedCoffee = { name, supplier, category, quantity, taste, details, photo };
         console.log(updatedCoffee);
+
 
         // send data to the server
         fetch(`http://localhost:5002/coffee/${_id}`, {
@@ -30,7 +34,7 @@ const UpdateCoffee = () => {
             headers: {
                 'content-type': 'application/json'
             },
-            body: JSON.stringify(updatedCoffee)
+            body: JSON.stringify(updatedCoffee),
         })
             .then(res => res.json())
             .then(data => {
@@ -38,89 +42,99 @@ const UpdateCoffee = () => {
                 if (data.modifiedCount > 0) {
                     Swal.fire({
                         title: 'Success!',
-                        text: 'Coffee Updated Successfully',
+                        text: 'Coffee Updated successfully',
                         icon: 'success',
-                        confirmButtonText: 'Cool'
+                        confirmButtonText: 'OK'
                     })
                 }
-            })
+            });
     }
 
-    return (
-        <div className="bg-[#F4F3F0] p-24">
-            <h2 className="text-3xl font-extrabold">Update Coffee: {name}</h2>
-            <form onSubmit={handleUpdateCoffee}>
-                {/* form name and quantity row */}
-                <div className="md:flex mb-8">
-                    <div className="form-control md:w-1/2">
-                        <label className="label">
-                            <span className="label-text">Coffee Name</span>
-                        </label>
-                        <label className="input-group">
-                            <input type="text" name="name" defaultValue={name} placeholder="Coffee Name" className="input input-bordered w-full" />
-                        </label>
-                    </div>
-                    <div className="form-control md:w-1/2 ml-4">
-                        <label className="label">
-                            <span className="label-text">Available Quantity</span>
-                        </label>
-                        <label className="input-group">
-                            <input type="text" name="quantity" defaultValue={quantity} placeholder="Available Quantity" className="input input-bordered w-full" />
-                        </label>
-                    </div>
-                </div>
-                {/* form supplier row */}
-                <div className="md:flex mb-8">
-                    <div className="form-control md:w-1/2">
-                        <label className="label">
-                            <span className="label-text">Supplier Name</span>
-                        </label>
-                        <label className="input-group">
-                            <input type="text" name="supplier" defaultValue={supplier} placeholder="Supplier Name" className="input input-bordered w-full" />
-                        </label>
-                    </div>
-                    <div className="form-control md:w-1/2 ml-4">
-                        <label className="label">
-                            <span className="label-text">Taste</span>
-                        </label>
-                        <label className="input-group">
-                            <input type="text" name="taste" defaultValue={taste} placeholder="Taste" className="input input-bordered w-full" />
-                        </label>
-                    </div>
-                </div>
-                {/* form category and details row */}
-                <div className="md:flex mb-8">
-                    <div className="form-control md:w-1/2">
-                        <label className="label">
-                            <span className="label-text">Category</span>
-                        </label>
-                        <label className="input-group">
-                            <input type="text" name="category" defaultValue={category} placeholder="Category" className="input input-bordered w-full" />
-                        </label>
-                    </div>
-                    <div className="form-control md:w-1/2 ml-4">
-                        <label className="label">
-                            <span className="label-text">Details</span>
-                        </label>
-                        <label className="input-group">
-                            <input type="text" name="details" defaultValue={details} placeholder="Details" className="input input-bordered w-full" />
-                        </label>
-                    </div>
-                </div>
-                {/* form Photo url row */}
-                <div className="mb-8">
-                    <div className="form-control w-full">
-                        <label className="label">
-                            <span className="label-text">Photo URL</span>
-                        </label>
-                        <label className="input-group">
-                            <input type="text" name="photo" defaultValue={photo} placeholder="Photo URL" className="input input-bordered w-full" />
-                        </label>
-                    </div>
-                </div>
-                <input type="submit" value="Update Coffee" className="btn btn-block" />
 
-            </form>
+
+
+    return (
+        <div>
+            <Navbar></Navbar>
+
+            <div className='container mx-auto px-10 mt-10 flex gap-3'>
+                <div className='flex items-center'>
+                    <Link to='/'>
+                        <AiOutlineArrowLeft></AiOutlineArrowLeft>
+                    </Link>
+                </div>
+                <h3 className='font-Rancho text-2xl'>Back to Home</h3>
+            </div>
+
+            <div className="hero container mx-auto mb-10">
+                <div className="w-full">
+                    <form onSubmit={handleUpdateCoffee} className="bg-gray-100 p-10 rounded-xl m-10">
+                        <h2 className="text-2xl font-bold text-center mb-5">Update {name} Coffee</h2>
+                        <div className="flex flex-col lg:flex-row gap-5">
+                            <div className="w-full">
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Name</span>
+                                    </label>
+                                    <input type="text" placeholder="Enter Coffee Name" name="name" defaultValue={name} className="input input-bordered" required />
+                                </div>
+
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Supplier</span>
+                                    </label>
+                                    <input type="text" placeholder="Enter Coffee Supplier" name="supplier" defaultValue={supplier} className="input input-bordered" required />
+                                </div>
+
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Category</span>
+                                    </label>
+                                    <input type="text" placeholder="Enter Coffee Category" name="category" defaultValue={category} className="input input-bordered" required />
+                                </div>
+                            </div>
+
+                            <div className="w-full">
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Available Quantity</span>
+                                    </label>
+                                    <input type="text" placeholder="Available Quantity" name="quantity" defaultValue={quantity} className="input input-bordered" required />
+                                </div>
+
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Taste</span>
+                                    </label>
+                                    <input type="text" placeholder="Enter Coffee Taste" name="taste" defaultValue={taste} className="input input-bordered" required />
+                                </div>
+
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Details</span>
+                                    </label>
+                                    <input type="text" placeholder="Enter Coffee Details" name="details" defaultValue={details} className="input input-bordered" required />
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div className="w-full">
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text">Photo</span>
+                                </label>
+                                <input type="text" placeholder="Enter Photo URL" name="photo" defaultValue={photo} className="input input-bordered" required />
+                            </div>
+                        </div>
+
+                        <div className="form-control mt-6">
+                            <input className="btn bg-[#D2B48C] border-0 text-white" type="submit" value="Update Coffee" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <Footer></Footer>
         </div>
     );
 };
