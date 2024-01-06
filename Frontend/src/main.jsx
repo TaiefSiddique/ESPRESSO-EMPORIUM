@@ -12,6 +12,7 @@ import ErrorPage from './components/ErrorPage';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import AuthProvider from './provider/AuthProvider';
+import ViewCoffee from './components/ViewCoffee';
 
 
 const router = createBrowserRouter([
@@ -28,6 +29,11 @@ const router = createBrowserRouter([
   {
     path: '/updateCoffee/:id',
     element: <UpdateCoffee></UpdateCoffee>,
+    loader: ({ params }) => fetch(`http://localhost:5002/coffee/${params.id}`),
+  },
+  {
+    path: '/coffee/:id',
+    element: <ViewCoffee></ViewCoffee>,
     loader: ({ params }) => fetch(`http://localhost:5002/coffee/${params.id}`),
   },
   {

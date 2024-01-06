@@ -63,9 +63,11 @@ const CoffeeCard = ({ coffee, coffees, setCoffees }) => {
 
                 <div className='flex items-center col-span-1'>
                     <div className="btn-group btn-group-vertical space-y-4">
-                        <button className="btn text-2xl bg-yellow-600 text-white">
-                            <AiFillEye></AiFillEye>
-                        </button>
+                        <Link to={`/coffee/${_id}`}>
+                            <button className="btn text-2xl bg-yellow-600 text-white">
+                                <AiFillEye></AiFillEye>
+                            </button>
+                        </Link>
                         <Link to={`/updateCoffee/${_id}`}>
                             <button className="btn text-2xl bg-black text-white">
                                 <BsFillPencilFill></BsFillPencilFill>

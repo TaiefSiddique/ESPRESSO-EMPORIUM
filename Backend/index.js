@@ -1,10 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-const csurf = require('csurf');
-const session = require('express-session');
-const crypto = require('crypto'); // Added crypto module
+
 require('dotenv').config();
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
@@ -14,17 +10,9 @@ const port = process.env.PORT || 5002;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(helmet());
-app.use(express.urlencoded({ extended: true }));
-app.use(session({ secret: 'your-secret-key', resave: false, saveUninitialized: true, cookie: { secure: true, httpOnly: true } }));
-app.use(csurf({ cookie: true }));
 
-// Rate limiting
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 100,
-});
-app.use(limiter);
+
+
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.nebbavw.mongodb.net`;
 
@@ -36,46 +24,6 @@ const client = new MongoClient(uri, {
     },
 });
 
-// AES Encryption and Decryption
-function encryptAES(text, key, iv) {
-    const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv);
-    let encrypted = cipher.update(text, 'utf-8', 'hex');
-    encrypted += cipher.final('hex');
-    return encrypted;
-}
-
-function decryptAES(encryptedText, key, iv) {
-    const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key), iv);
-    let decrypted = decipher.update(encryptedText, 'hex', 'utf-8');
-    decrypted += decipher.final('utf-8');
-    return decrypted;
-}
-
-// RSA Encryption and Decryption
-const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
-    modulusLength: 2048,
-    publicKeyEncoding: { type: 'spki', format: 'pem' },
-    privateKeyEncoding: { type: 'pkcs8', format: 'pem' },
-});
-
-function encryptRSA(text, publicKey) {
-    const bufferText = Buffer.from(text, 'utf-8');
-    const encrypted = crypto.publicEncrypt(publicKey, bufferText);
-    return encrypted.toString('base64');
-}
-
-function decryptRSA(encryptedText, privateKey) {
-    const bufferEncrypted = Buffer.from(encryptedText, 'base64');
-    const decrypted = crypto.privateDecrypt({ key: privateKey, padding: crypto.constants.RSA_PKCS1_OAEP_PADDING }, bufferEncrypted);
-    return decrypted.toString('utf-8');
-}
-
-// SHA-256 Hashing
-function hashSHA256(text) {
-    const hash = crypto.createHash('sha256');
-    hash.update(text);
-    return hash.digest('hex');
-}
 
 async function run() {
     try {
